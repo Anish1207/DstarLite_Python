@@ -48,30 +48,3 @@ class Graph:
 			self.goal = id
 		else:
 			raise ValueError('goal id not in graph')
-
-
-def addNodeToGraph(graph, id, neighbors, edge=1):
-	node = Node(id)
-	for i in neighbors:
-		# print(i)
-		node.parents[i] = edge
-		node.children[i] = edge
-	graph[id] = node
-	return graph
-
-
-def makeGraph():
-	graph = {}
-
-	# 4-connected graph (w/out diagonals)
-	graph = addNodeToGraph(graph, 'x1y1', ['x1y2', 'x2y1'])
-	graph = addNodeToGraph(graph, 'x2y1', ['x1y1', 'x3y1', 'x2y2'])
-	graph = addNodeToGraph(graph, 'x1y2', ['x1y1', 'x2y2'])
-	graph = addNodeToGraph(graph, 'x2y2', ['x1y2', 'x2y1', 'x3y2'])
-	graph = addNodeToGraph(graph, 'x3y1', ['x3y2', 'x2y1'])
-	graph = addNodeToGraph(graph, 'x3y2', ['x3y1', 'x2y2'])
-
-	g = GridWorld(X_DIM, Y_DIM)
-	# g.graph = graph
-	# print(g)
-	return g
