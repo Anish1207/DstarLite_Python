@@ -1,17 +1,12 @@
-from graph import Node, Graph
+from graph import Node,Graph
 
 
 class GridWorld(Graph):
-    def __init__(self, x_dim, y_dim, connect8=True):
+    def __init__(self, x_dim, y_dim):
         self.x_dim = x_dim
         self.y_dim = y_dim
-        # First make an element for each row (height of grid)
-        self.cells = [0] * y_dim
-        # Go through each element and replace with row (width of grid)
-        for i in range(y_dim):
-            self.cells[i] = [0] * x_dim
-        # will this be an 8-connected graph or 4-connected?
-        self.connect8 = connect8
+      
+        self.cells=[[0 for _ in range(x_dim)] for _ in range(y_dim) ]
         self.graph = {}
         self.generateGraphFromGrid()
         # self.printGrid()
