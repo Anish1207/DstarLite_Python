@@ -7,13 +7,13 @@ from grid import GridWorld
 from d_star_lite import initDStarLite, moveAndRescan
 
 # Define some colors
-BLACK = (0, 0, 0)
-WHITE = (200, 200, 200)
-GREEN = (0, 255, 0)
-RED   = (255, 0, 0)
-GRAY = (145, 145, 102)
-DARKGRAY = (100, 100, 100)
-BLUE  = (0, 0, 80)
+BLACK 		= (0, 0, 0)
+WHITE 		= (200, 200, 200)
+GREEN 		= (0, 255, 0)
+RED   		= (255, 0, 0)
+GRAY 		= (145, 145, 102)
+DARKGRAY 	= (100, 100, 100)
+BLUE  		= (0, 0, 80)
 
 colors = {
 	 		 0: WHITE,
@@ -47,24 +47,18 @@ def stateNameToCoords(name):
     return [int(name.split('x')[1].split('y')[0]), int(name.split('x')[1].split('y')[1])]
 
 
-
-
 transparent = pygame.Surface((3*width+3*margin,3*height+3*margin))  # the size of your rect
 transparent.set_alpha(128)                # alpha level
 transparent.fill(DARKGRAY)           # this fills the entire surface
-
-
 
 
 def main():
 
 	# Loop until the user clicks the close button.
 	done = False
-
 	
 	graph = GridWorld(dimension_x, dimension_y)
 	
-
 	s_start=input("Enter start (xnym, where n,m are coordinates) : ")
 	s_goal= input("Enter goal (xnym, where n,m are coordinates)  : ")
 #	s_start = 'x1y2'
@@ -82,10 +76,8 @@ def main():
 
 	s_current = s_start
 	pos_coords = stateNameToCoords(s_current)
-
 	
 	robot_centers=[]
-
 
 	# Initialize pygame
 	pygame.init()
@@ -99,10 +91,9 @@ def main():
 	clock = pygame.time.Clock()
 	basicfont = pygame.font.SysFont('Comic Sans MS', 22)
 
-
 	# -------- Main Program Loop -----------
 	while done==False:
-		for event in pygame.event.get():  # User did something
+		for event in pygame.event.get():   # User did something
 			if event.type == pygame.QUIT:  # If user clicked close
 				done = True  # Flag that we are done so we exit this loop
 			elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
