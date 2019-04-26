@@ -6,7 +6,7 @@ def stateNameToCoords(name):
 	return [int(name.split('x')[1].split('y')[0]), int(name.split('x')[1].split('y')[1])]
 
 def topKey(queue):
-	queue.sort()
+#	queue.sort()
 	# print(queue)
 	if len(queue) > 0:
 		return queue[0][:2]
@@ -17,14 +17,14 @@ def topKey(queue):
 def heuristic_from_s(Graph, id, s):
 	x_distance = abs(int(id.split('x')[1][0]) - int(s.split('x')[1][0]))
 	y_distance = abs(int(id.split('y')[1][0]) - int(s.split('y')[1][0]))
-	return max(x_distance, y_distance)
+	return x_distance + y_distance
 
 def calculateKey(Graph, id, s_current, k_m):
 	return (min(Graph.graph[id].g, Graph.graph[id].rhs) + heuristic_from_s(Graph, id, s_current) + k_m, 
 			min(Graph.graph[id].g, Graph.graph[id].rhs))
 
 def updateVertex(Graph, queue, id, s_current, k_m):
-#	s_goal = Graph.goal
+#   s_goal = Graph.goal
 
 	if id != Graph.goal:
 		min_rhs = float('inf')
@@ -92,6 +92,7 @@ def nextInShortestPath(Graph, s_current):
 			raise ValueError('could not find child for transition!')
 
 def scanForObstacles(Graph, queue, s_current, k_m):
+	
 	states_to_update = {}
 
 	for neighbor in Graph.graph[s_current].children:
@@ -99,6 +100,7 @@ def scanForObstacles(Graph, queue, s_current, k_m):
 		states_to_update[neighbor] = Graph.cells[neighbor_coords[1]][neighbor_coords[0]]
 
 	new_obstacle = False
+
 	for state in states_to_update:
 		if states_to_update[state] < 0:  # found cell with obstacle
 			# print('found obstacle in ', state)
@@ -123,26 +125,27 @@ def scanForObstacles(Graph, queue, s_current, k_m):
 def moveAndRescan(Graph, queue, s_current,k_m):
 	if(s_current == Graph.goal):
 		return 'goal', k_m
+
+#	elif Graph.graph[s_current].g==float('inf'):
+#		print("No path exists")
+#		sys.exit()
 	else:
-		s_last = s_current
 		s_new = nextInShortestPath(Graph, s_current)
-		new_coords = stateNameToCoords(s_new)
-
-#		if(Graph.cells[new_coords[1]][new_coords[0]] ==-1):  # just ran into new obstacle
-#			s_new = s_last  # need to hold tight and scan/replan first
-
 		results = scanForObstacles(Graph, queue, s_new, k_m)
-		# print(graph)
-		k_m += heuristic_from_s(Graph, s_last, s_new)
-		computeShortestPath(Graph, queue, s_current, k_m)
+		k_m += heuristic_from_s(Graph, s_new, Graph.goal)
+		s_last = s_current
+		computeShortestPath(Graph, queue, s_new, k_m)
 
+		new_coords = stateNameToCoords(s_new)
+		if(Graph.cells[new_coords[1]][new_coords[0]] == -1):  # just ran into new obstacle
+			s_new = s_current # need to hold tight and scan/replan first
 		return s_new, k_m
 
 
 def initDStarLite(Graph, queue, s_start, s_goal, k_m):
 	Graph.graph[s_goal].rhs = 0
 	heapq.heappush(queue, calculateKey(Graph, s_goal, s_start, k_m) + (s_goal,))
-	print(queue[0])
+	#print(queue[0])
 	computeShortestPath(Graph, queue, s_start, k_m)
 	
 	return (Graph, queue, k_m)
